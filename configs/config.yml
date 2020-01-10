@@ -1,0 +1,16 @@
+
+server:
+  host: "0.0.0.0"
+  port: 8000
+  bodyLimit: 4096
+
+auth:
+  header: "X-Gitlab-token"
+  token: "llwixfry82347r6bx23874bvr6238x2423kk"
+
+default:
+  scriptPath: "./scripts"
+#  executor: "/bin/sh"
+#  script: "bash_example.sh"
+  executor: "/bin/python"
+  script: "python_example.py"
