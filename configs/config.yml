@@ -4,13 +4,15 @@ server:
   port: 8000
   bodyLimit: 4096
 
-auth:
+request:
   header: "X-Gitlab-token"
   token: "llwixfry82347r6bx23874bvr6238x2423kk"
+  param: "hook"
 
-default:
-  scriptPath: "./scripts"
-#  executor: "/bin/sh"
-#  script: "bash_example.sh"
-  executor: "/bin/python"
-  script: "python_example.py"
+hooks:
+  'default':
+    executor: "/bin/python"
+    script: "./scripts/python_example.py"
+  'example':
+    executor: "/bin/sh"
+    script: "./scripts/bash_example.sh"

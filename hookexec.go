@@ -18,21 +18,21 @@ type Config struct {
 		Host      string `yaml:"host"`
 		BodyLimit int64  `yaml:"bodyLimit"`
 	} `yaml:"server"`
-	Auth struct {
-		Header    string `yaml:"header"`
-		Token     string `yaml:"token"`
-	} `yaml:"auth"`
-	Default struct {
+	Request struct {
+		Header string `yaml:"header"`
+		Token  string `yaml:"token"`
+		Param  string `yaml:"param"`
+	} `yaml:"request"`
+	Hooks map[string]struct {
 		Executor   string `yaml:"executor"`
 		ScriptPath string `yaml:"scriptPath"`
-		Script    string `yaml:"script"`
-	} `yaml:"Default"`
+		Script     string `yaml:"script"`
+	} `yaml:"hooks"`
 }
 
 func main() {
 	readConfig(&cfg)
 	http.HandleFunc("/", RequestHandler)
-
 	serve := fmt.Sprintf("%s:%s", cfg.Server.Host, cfg.Server.Port)
 	if err := http.ListenAndServe(serve, nil); err != nil {
 		log.Fatal(err)
@@ -53,35 +53,21 @@ func readConfig(cfg *Config) {
 	}
 }
 
-func processError(err error) {
-	fmt.Println(err)
-	os.Exit(2)
-}
-
 func RequestHandler(w http.ResponseWriter, r *http.Request) {
 
-	var script string
-
-	// parse header and check token
-	header := r.Header.Get(cfg.Auth.Header)
-	if header != cfg.Auth.Token {
+	header := r.Header.Get(cfg.Request.Header)
+	if header != cfg.Request.Token {
 		w.WriteHeader(http.StatusUnauthorized)
 		return
 	}
 
-	// Double check it's a post request being made
-	if r.Method != http.MethodPost {
-		w.WriteHeader(http.StatusMethodNotAllowed)
-		fmt.Fprintf(w, "invalid_http_method")
-		return
-	}
-
-	commands, ok := r.URL.Query()["hook"]
-
-	if !ok {
-		script = cfg.Default.Script
-	} else {
-		script = commands[0]
+	params, exist := r.URL.Query()[cfg.Request.Param]
+	var hook = "default"
+	if exist {
+		_, ok := cfg.Hooks[params[0]]
+		if ok {
+			hook = params[0]
+		}
 	}
 
 	r.Body = http.MaxBytesReader(w, r.Body, cfg.Server.BodyLimit)
@@ -91,14 +77,17 @@ func RequestHandler(w http.ResponseWriter, r *http.Request) {
 	}
 	bodyString := string(bodyBytes)
 
-	cmd := exec.Command(cfg.Default.Executor, script, bodyString)
-	cmd.Dir = cfg.Default.ScriptPath
+	cmd := exec.Command(cfg.Hooks[hook].Executor, cfg.Hooks[hook].Script, bodyString)
 	out, err := cmd.Output()
 
-	// Log all data. Form is a map[]
 	if err == nil {
 		log.Println(string(out))
 	} else {
 		log.Println(err)
 	}
+}
+
+func processError(err error) {
+	fmt.Println(err)
+	os.Exit(2)
 }
