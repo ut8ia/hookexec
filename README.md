@@ -1,4 +1,4 @@
-#Hook executor
+# Hook executor
 
 Server that catch hooks from services and execute pre-configured scripts.
 - POST or GET hooks
@@ -11,7 +11,7 @@ Typical use cases :
 - build automation in CI\CD
 - relay events to N messangers
  
- ### config example
+### config example
 ```yaml
 server:
   host: "0.0.0.0" # default address
@@ -50,11 +50,11 @@ $ curl -X GET http://localhost:8000?hook=unknownhookname  -H "X-Gitlab-token: ll
 Result : default hook script executed ( hook name not resolved )
 
 ```bash
-$ curl -X GET http://localhost:8000?hook=unknownhookname  -H "X-Gitlab-token: llwixfry82347r6bx23874bvr6238x2423kk"
+$ curl -X GET http://localhost:8000?hook=unknownhookname
 ```
 Result : HTTP 401 Unauthorized ( Auth header missing or invalid )
 
 ```bash
-curl -X POST http://localhost:8000 -d '{"mydata":1234234}' -H "X-Gitlab-token: llwixfry82347r6bx23874bvr6238x2423kk" 
+curl -X POST http://localhost:8000?hook=example -d '{"mydata":1234234}' -H "X-Gitlab-token: llwixfry82347r6bx23874bvr6238x2423kk" 
 ```
 Result : Post data successfully relayed to execution script as argument
