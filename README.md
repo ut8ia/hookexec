@@ -1,6 +1,6 @@
-# Hook executor
+# HTTP hooks executor
 
-Server that catch hooks from services and execute pre-configured scripts.
+HTTP Server that catch hooks from services and execute pre-configured scripts.
 - POST or GET hooks
 - Custom param, header and Auth tokens
 - Python, bash or whatever you need as execution worker
@@ -9,7 +9,7 @@ Server that catch hooks from services and execute pre-configured scripts.
 Typical use cases : 
 - catch GitLab or GitHub hook to refresh environment
 - build automation in CI\CD
-- relay events to N messangers
+- relay events to N messengers
  
 ### config example
 ```yaml
@@ -21,7 +21,7 @@ server:
 request:
   header: "X-Gitlab-token" # Auth header name
   token: "llwixfry82347r6bx23874bvr6238x2423kk" # Auth header token
-  param: "hook" # URL param that parse as hook name ?hook=yourhookname
+  param: "hook" # URL param that means a hook name, like ?hook=yourhookname
 
 # list of your hooks 
 hooks:
