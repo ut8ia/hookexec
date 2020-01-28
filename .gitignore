@@ -5,10 +5,15 @@ nbproject
 .project
 .settings
 
-# windows thumbnail cache
-Thumbs.db
-# Mac DS_Store Files
-.DS_Store
+# exclude everything
+configs/*
+logs/*
+scripts/*
+# exception to the rule
+!configs/.gitkeep
+!logs/.gitkeep
+!scripts/.gitkeep
 
+#builded binary executions
 hookexec
 hookexec.exe
