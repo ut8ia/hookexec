@@ -1,6 +1,6 @@
 # HTTP hooks executor
 
-HTTP Server that catch hooks from services and execute pre-configured scripts.
+Simple HTTP Server that catch hooks from services and execute pre-configured scripts.
 - POST or GET hooks
 - Custom param, header and Auth tokens
 - Python, bash or whatever you need as execution worker
@@ -58,3 +58,30 @@ Result : HTTP 401 Unauthorized ( Auth header missing or invalid )
 curl -X POST http://localhost:8000?hook=example -d '{"mydata":1234234}' -H "X-Gitlab-token: llwixfry82347r6bx23874bvr6238x2423kk" 
 ```
 Result : Post data successfully relayed to execution script as argument
+
+### Build
+Just run 
+```bash
+$ make build
+```
+You can run example 
+```bash
+$ make example
+```
+
+### Running
+Default config path is ./configs/config.yml so you can simply run
+```bash
+$ ./hookexec
+```
+You can run N instances with different configs, specifies it in call argument :
+```bash
+$ ./hookexec ./configs/first_listener_config.yml 
+....
+$ ./hookexec ./configs/second_listener_config.yml 
+```
+### Logging
+Relay stdout to your logfile 
+```bash
+$ ./hookexec ./examples/config.yml &> ./logs/example.log
+```

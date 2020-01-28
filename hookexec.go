@@ -31,7 +31,12 @@ type Config struct {
 }
 
 func main() {
-	readConfig(&cfg)
+	configFile := "./configs/config.yml"
+	if len(os.Args) >1 {
+		configFile = os.Args[1]
+	}
+	log.Println(configFile)
+	readConfig(&cfg, configFile)
 	http.HandleFunc("/", RequestHandler)
 	serve := fmt.Sprintf("%s:%s", cfg.Server.Host, cfg.Server.Port)
 	if err := http.ListenAndServe(serve, nil); err != nil {
@@ -39,8 +44,8 @@ func main() {
 	}
 }
 
-func readConfig(cfg *Config) {
-	f, err := os.Open("./configs/config.yml")
+func readConfig(cfg *Config, configFile string) {
+	f, err := os.Open(configFile)
 	if err != nil {
 		processError(err)
 	}
