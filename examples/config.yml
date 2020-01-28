@@ -12,7 +12,7 @@ request:
 hooks:
   'default':
     executor: "/bin/python"
-    script: "./scripts/python_example.py"
+    script: "./examples/python_example.py"
   'example':
     executor: "/bin/sh"
-    script: "./scripts/bash_example.sh"
+    script: "./examples/bash_example.sh"
