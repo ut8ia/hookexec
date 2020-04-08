@@ -60,7 +60,11 @@ curl -X POST http://localhost:8000?hook=example -d '{"mydata":1234234}' -H "X-Gi
 Result : Post data successfully relayed to execution script as argument
 
 ### Build
-Just run 
+For docker image 
+```bash
+$ make image
+```
+Just local build 
 ```bash
 $ make build
 ```
