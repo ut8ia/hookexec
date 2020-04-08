@@ -1,3 +1,4 @@
+![Go](https://github.com/ut8ia/hookexec/workflows/Go/badge.svg?branch=master)
 # HTTP hooks executor
 
 Simple HTTP Server that catch hooks from services and execute pre-configured scripts.
