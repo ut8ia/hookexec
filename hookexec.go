@@ -8,6 +8,7 @@ import (
 	"net/http"
 	"os"
 	"os/exec"
+	"time"
 )
 
 var cfg Config
@@ -32,11 +33,23 @@ type Config struct {
 
 func main() {
 	configFile := "./configs/config.yml"
-	if len(os.Args) >1 {
+	if len(os.Args) > 1 {
 		configFile = os.Args[1]
 	}
 	log.Println(configFile)
+
 	readConfig(&cfg, configFile)
+	ticker := time.NewTicker(10 * time.Second)
+
+	go func() {
+		for {
+			select {
+			case <-ticker.C:
+				readConfig(&cfg, configFile)
+			}
+		}
+	}()
+
 	http.HandleFunc("/", RequestHandler)
 	serve := fmt.Sprintf("%s:%s", cfg.Server.Host, cfg.Server.Port)
 	if err := http.ListenAndServe(serve, nil); err != nil {

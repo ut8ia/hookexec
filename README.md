@@ -33,6 +33,8 @@ hooks:
     executor: "/bin/sh"
     script: "./scripts/bash_example.sh"
 ```
+Configuration file reads every 10 seconds.
+ 
 
 ### hooks test examples
 ```bash
